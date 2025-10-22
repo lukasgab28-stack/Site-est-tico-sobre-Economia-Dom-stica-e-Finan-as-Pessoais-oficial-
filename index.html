@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanças Domésticas - Controle seu Orçamento</title>
+    <style>
+        /* Reset e estilos gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #2ecc71;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --warning: #e74c3c;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header e Navegação */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Seções gerais */
+        section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            margin: 10px auto;
+        }
+
+        /* Página Inicial - Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #27ae60;
+        }
+
+        /* Cards de recursos */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-card h3 i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        /* Simulador de Orçamento */
+        .simulator {
+            background-color: var(--light);
+        }
+
+        .budget-form {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .expense-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .expense-item input {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .remove-expense {
+            background-color: var(--warning);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        #add-expense {
+            background-color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            display: none;
+        }
+
+        .result.positive {
+            border-left: 5px solid var(--accent);
+        }
+
+        .result.negative {
+            border-left: 5px solid var(--warning);
+        }
+
+        /* Dicas de Consumo */
+        .tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .tip-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .tip-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        /* Infográficos */
+        .infographics {
+            background-color: var(--light);
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .chart {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            margin-bottom: 1rem;
+        }
+
+        .bar {
+            width: 40px;
+            background-color: var(--secondary);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Glossário */
+        .glossary {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .term-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .term-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .term-card p {
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                width: 100%;
+                margin-top: 1rem;
+                display: none;
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav ul li {
+                margin: 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav ul li a {
+                display: block;
+                padding: 0.8rem 0;
+            }
+
+            .mobile-menu {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header e Navegação -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i>💰</i>
+                <span>Finanças Domésticas</span>
+            </div>
+            <div class="mobile-menu">☰</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#simulator">Simulador</a></li>
+                    <li><a href="#tips">Dicas</a></li>
+                    <li><a href="#infographics">Infográficos</a></li>
+                    <li><a href="#glossary">Glossário</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Página Inicial -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Controle suas Finanças, Transforme sua Vida</h1>
+            <p>Aprenda a gerenciar seu orçamento doméstico, economizar dinheiro e tomar decisões financeiras mais conscientes.</p>
+            <a href="#simulator" class="btn">Comece Agora</a>
+        </div>
+    </section>
+
+    <section class="intro">
+        <div class="container">
+            <h2 class="section-title">Por que Controlar suas Finanças?</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3><i>📊</i> Organização Financeira</h3>
+                    <p>Aprenda a acompanhar seus gastos e receitas para ter uma visão clara da sua situação financeira.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><i>🌱</i> Consumo Consciente</h3>
+                    <p>Descubra como suas escolhas de consumo impactam o meio ambiente e a sociedade.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><i>🎯</i> Metas e Objetivos</h3>
+                    <p>Defina metas financeiras realistas e crie um plano para alcançá-las.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulador de Orçamento -->
+    <section id="simulator" class="simulator">
+        <div class="container">
+            <h2 class="section-title">Simulador de Orçamento Mensal</h2>
+            <div class="budget-form">
+                <div class="form-group">
+                    <label for="income">Renda Mensal (R$)</label>
+                    <input type="number" id="income" placeholder="Ex: 3000">
+                </div>
+                
+                <h3>Despesas Fixas</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="housing">Moradia (R$)</label>
+                        <input type="number" id="housing" placeholder="Aluguel, condomínio">
+                    </div>
+                    <div class="form-group">
+                        <label for="utilities">Contas Básicas (R$)</label>
+                        <input type="number" id="utilities" placeholder="Água, luz, gás">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="transport">Transporte (R$)</label>
+                        <input type="number" id="transport" placeholder="Combustível, transporte público">
+                    </div>
+                    <div class="form-group">
+                        <label for="food">Alimentação (R$)</label>
+                        <input type="number" id="food" placeholder="Mercado, restaurantes">
+                    </div>
+                </div>
+                
+                <h3>Despesas Variáveis</h3>
+                <div id="expenses-container">
+                    <div class="expense-item">
+                        <input type="text" class="expense-name" placeholder="Nome da despesa">
+                        <input type="number" class="expense-value" placeholder="Valor (R$)">
+                        <button class="remove-expense">×</button>
+                    </div>
+                </div>
+                <button id="add-expense" class="btn">Adicionar Despesa</button>
+                
+                <button id="calculate" class="btn">Calcular Orçamento</button>
+                
+                <div id="result" class="result">
+                    <h3>Resultado do Orçamento</h3>
+                    <p id="balance-text"></p>
+                    <p id="savings-text"></p>
+                    <p id="recommendation"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dicas de Consumo Consciente -->
+    <section id="tips" class="tips-section">
+        <div class="container">
+            <h2 class="section-title">Dicas de Consumo Consciente</h2>
+            <div class="tips">
+                <div class="tip-card">
+                    <div class="tip-icon">🛒</div>
+                    <h3>Planeje suas Compras</h3>
+                    <p>Faça uma lista antes de ir ao mercado e evite compras por impulso. Isso reduz desperdícios e economiza dinheiro.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">💡</div>
+                    <h3>Reduza o Consumo de Energia</h3>
+                    <p>Substitua lâmpadas por modelos LED, desligue aparelhos da tomada e aproveite a luz natural sempre que possível.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🚰</div>
+                    <h3>Economize Água</h3>
+                    <p>Tome banhos mais curtos, conserte vazamentos e reutilize água quando possível. Cada gota conta!</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🚲</div>
+                    <h3>Mobilidade Sustentável</h3>
+                    <p>Prefira transporte público, bicicleta ou caminhada para trajetos curtos. Além de economizar, você ajuda o meio ambiente.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">📱</div>
+                    <h3>Avalie Necessidades Reais</h3>
+                    <p>Antes de comprar, pergunte-se: "Eu realmente preciso disso?". Evite o consumismo desnecessário.</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">♻️</div>
+                    <h3>Pratique a Reciclagem</h3>
+                    <p>Separe o lixo corretamente e dê preferência a produtos com embalagens recicláveis ou reutilizáveis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Infográficos com Dados Econômicos -->
+    <section id="infographics" class="infographics">
+        <div class="container">
+            <h2 class="section-title">Infográficos com Dados Econômicos</h2>
+            <div class="charts">
+                <div class="chart-container">
+                    <h3 class="chart-title">Distribuição de Gastos Domésticos no Brasil</h3>
+                    <div class="chart">
+                        <div class="bar" style="height: 70%;">
+                            <span class="bar-value">35%</span>
+                            <span class="bar-label">Moradia</span>
+                        </div>
+                        <div class="bar" style="height: 50%;">
+                            <span class="bar-value">25%</span>
+                            <span class="bar-label">Alimentação</span>
+                        </div>
+                        <div class="bar" style="height: 40%;">
+                            <span class="bar-value">20%</span>
+                            <span class="bar-label">Transporte</span>
+                        </div>
+                        <div class="bar" style="height: 30%;">
+                            <span class="bar-value">15%</span>
+                            <span class="bar-label">Saúde</span>
+                        </div>
+                        <div class="bar" style="height: 20%;">
+                            <span class="bar-value">10%</span>
+                            <span class="bar-label">Lazer</span>
+                        </div>
+                    </div>
+                    <p>Fonte: Dados fictícios baseados em padrões médios brasileiros</p>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">Comparação Regional de Custos de Vida</h3>
+                    <div class="chart">
+                        <div class="bar" style="height: 90%;">
+                            <span class="bar-value">Alto</span>
+                            <span class="bar-label">Sudeste</span>
+                        </div>
+                        <div class="bar" style="height: 70%;">
+                            <span class="bar-value">Médio</span>
+                            <span class="bar-label">Sul</span>
+                        </div>
+                        <div class="bar" style="height: 60%;">
+                            <span class="bar-value">Médio</span>
+                            <span class="bar-label">Centro-Oeste</span>
+                        </div>
+                        <div class="bar" style="height: 50%;">
+                            <span class="bar-value">Baixo</span>
+                            <span class="bar-label">Nordeste</span>
+                        </div>
+                        <div class="bar" style="height: 40%;">
+                            <span class="bar-value">Baixo</span>
+                            <span class="bar-label">Norte</span>
+                        </div>
+                    </div>
+                    <p>Fonte: Dados fictícios para fins educacionais</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Glossário de Termos Financeiros -->
+    <section id="glossary" class="glossary-section">
+        <div class="container">
+            <h2 class="section-title">Glossário de Termos Financeiros</h2>
+            <div class="glossary">
+                <div class="term-card">
+                    <h3>Orçamento</h3>
+                    <p>Planejamento financeiro que estima receitas e despesas futuras para um determinado período.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Renda</h3>
+                    <p>Total de dinheiro recebido por uma pessoa ou família em um determinado período.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Despesa Fixa</h3>
+                    <p>Gastos que se repetem mensalmente com valores previsíveis, como aluguel e contas básicas.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Despesa Variável</h3>
+                    <p>Gastos que podem mudar de valor a cada mês, como alimentação, lazer e vestuário.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Poupança</h3>
+                    <p>Parte da renda que não é gasta e é reservada para uso futuro ou investimentos.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Investimento</h3>
+                    <p>Aplicação de recursos financeiros com o objetivo de obter retorno no futuro.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Juros</h3>
+                    <p>Remuneração cobrada pelo empréstimo de dinheiro ou rendimento de uma aplicação financeira.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Inflação</h3>
+                    <p>Aumento generalizado e contínuo dos preços de bens e serviços na economia.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Consumo Consciente</h3>
+                    <p>Prática de consumir de forma responsável, considerando os impactos ambientais e sociais.</p>
+                </div>
+                <div class="term-card">
+                    <h3>Endividamento</h3>
+                    <p>Situação em que uma pessoa ou família possui mais dívidas do que capacidade de pagamento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Finanças Domésticas</h3>
+                    <p>Educação financeira para uma vida mais equilibrada e sustentável.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#simulator">Simulador</a></li>
+                        <li><a href="#tips">Dicas</a></li>
+                        <li><a href="#infographics">Infográficos</a></li>
+                        <li><a href="#glossary">Glossário</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p>Email: contato@financasdomesticas.com</p>
+                    <p>Desenvolvido para fins educacionais</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Finanças Domésticas. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('active');
+        });
+
+        // Simulador de Orçamento
+        document.getElementById('add-expense').addEventListener('click', function() {
+            const container = document.getElementById('expenses-container');
+            const newExpense = document.createElement('div');
+            newExpense.className = 'expense-item';
+            newExpense.innerHTML = `
+                <input type="text" class="expense-name" placeholder="Nome da despesa">
+                <input type="number" class="expense-value" placeholder="Valor (R$)">
+                <button class="remove-expense">×</button>
+            `;
+            container.appendChild(newExpense);
+            
+            // Adicionar evento para remover despesa
+            newExpense.querySelector('.remove-expense').addEventListener('click', function() {
+                container.removeChild(newExpense);
+            });
+        });
+
+        // Calcular orçamento
+        document.getElementById('calculate').addEventListener('click', function() {
+            // Obter valores
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const housing = parseFloat(document.getElementById('housing').value) || 0;
+            const utilities = parseFloat(document.getElementById('utilities').value) || 0;
+            const transport = parseFloat(document.getElementById('transport').value) || 0;
+            const food = parseFloat(document.getElementById('food').value) || 0;
+            
+            // Calcular despesas variáveis
+            let variableExpenses = 0;
+            const expenseItems = document.querySelectorAll('.expense-item');
+            expenseItems.forEach(item => {
+                const value = parseFloat(item.querySelector('.expense-value').value) || 0;
+                variableExpenses += value;
+            });
+            
+            // Calcular total de despesas
+            const totalExpenses = housing + utilities + transport + food + variableExpenses;
+            
+            // Calcular saldo
+            const balance = income - totalExpenses;
+            
+            // Calcular porcentagem de poupança
+            const savingsPercentage = (balance / income) * 100;
+            
+            // Exibir resultado
+            const resultDiv = document.getElementById('result');
+            const balanceText = document.getElementById('balance-text');
+            const savingsText = document.getElementById('savings-text');
+            const recommendation = document.getElementById('recommendation');
+            
+            resultDiv.style.display = 'block';
+            
+            if (balance >= 0) {
+                resultDiv.className = 'result positive';
+                balanceText.textContent = `Seu saldo mensal é de R$ ${balance.toFixed(2)}.`;
+                savingsText.textContent = `Isso representa ${savingsPercentage.toFixed(1)}% da sua renda que pode ser poupada.`;
+                
+                if (savingsPercentage >= 20) {
+                    recommendation.textContent = 'Parabéns! Você está com uma boa margem para poupança e investimentos.';
+                } else if (savingsPercentage >= 10) {
+                    recommendation.textContent = 'Você está no caminho certo! Tente aumentar sua poupança gradualmente.';
+                } else {
+                    recommendation.textContent = 'Sua poupança está baixa. Analise seus gastos para identificar onde pode economizar.';
+                }
+            } else {
+                resultDiv.className = 'result negative';
+                balanceText.textContent = `Seu saldo mensal é negativo: R$ ${Math.abs(balance).toFixed(2)}.`;
+                savingsText.textContent = 'Você está gastando mais do que ganha.';
+                recommendation.textContent = 'É importante revisar seus gastos e identificar onde pode cortar despesas.';
+            }
+        });
+
+        // Adicionar evento para remover despesas existentes
+        document.querySelectorAll('.remove-expense').forEach(button => {
+            button.addEventListener('click', function() {
+                const container = document.getElementById('expenses-container');
+                if (container.children.length > 1) {
+                    container.removeChild(this.parentElement);
+                }
+            });
+        });
+
+        // Rolagem suave para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId !== '#') {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Fechar menu mobile se estiver aberto
+                        document.querySelector('nav').classList.remove('active');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
