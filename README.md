@@ -1,1 +1,1 @@
-# Site-est-tico-sobre-Economia-Dom-stica-e-Finan-as-Pessoais-oficial-
+Site educativo sobre controle financeiro pessoal e consumo consciente, desenvolvido com HTML, CSS e JavaScript puro. Oferece simulador de orçamento interativo para cálculo de receitas e despesas, dicas práticas de economia sustentável, infográficos visuais sobre distribuição de gastos e glossário com termos financeiros essenciais. Interface responsiva e acessível, integrando conhecimentos de matemática, sociologia e geografia. Projeto completo pronto para publicação no Netlify e GitHub.
